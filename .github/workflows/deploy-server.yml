@@ -1,0 +1,19 @@
+name: CD - Serveur Linux
+
+on:
+  workflow_run:
+    workflows: ["CI - Test HTML"]
+    types: [completed]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: [self-hosted, Linux, X64]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy vers NGINX
+        run: |
+          sudo cp index.html /var/www/html/index.html
+          sudo nginx -t
+          sudo systemctl reload nginx
