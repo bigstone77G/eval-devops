@@ -10,10 +10,12 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: [self-hosted, Linux, X64]
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Deploy vers NGINX
         run: |
-          sudo cp index.html /var/www/html/index.html
-          sudo nginx -t
+          cp index.html /var/www/html/index.html
+          nginx -t
           sudo systemctl reload nginx
+
